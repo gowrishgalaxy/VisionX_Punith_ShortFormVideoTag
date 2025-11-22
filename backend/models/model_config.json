@@ -1,0 +1,317 @@
+{
+  "model_name": "VideoSceneDetector",
+  "version": "1.0.0",
+  "description": "AI model for video scene detection and classification",
+  "created_date": "2025-11-21T21:49:38.607043",
+  "author": "Video AI Pipeline",
+  "model_architecture": {
+    "type": "CustomCNN",
+    "input_size": [
+      128,
+      128
+    ],
+    "input_channels": 3,
+    "num_classes": 6,
+    "class_names": [
+      "animation",
+      "outdoor",
+      "indoor",
+      "action",
+      "dialogue",
+      "transition"
+    ],
+    "layers": {
+      "feature_extractor": [
+        "Conv2d(3->32, kernel=3x3)",
+        "BatchNorm2d(32)",
+        "ReLU",
+        "MaxPool2d(2x2)",
+        "Dropout(0.25)",
+        "Conv2d(32->64, kernel=3x3)",
+        "BatchNorm2d(64)",
+        "ReLU",
+        "MaxPool2d(2x2)",
+        "Dropout(0.25)",
+        "Conv2d(64->128, kernel=3x3)",
+        "BatchNorm2d(128)",
+        "ReLU",
+        "AdaptiveAvgPool2d(7x7)"
+      ],
+      "classifier": [
+        "Dropout(0.5)",
+        "Linear(6272->256)",
+        "ReLU",
+        "Dropout(0.5)",
+        "Linear(256->6)"
+      ]
+    }
+  },
+  "training_details": {
+    "dataset": "Synthetic + Video Frames",
+    "total_samples": "100+",
+    "epochs_trained": 5,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "optimizer": "Adam",
+    "loss_function": "CrossEntropyLoss",
+    "validation_accuracy": "50-70%",
+    "framework": "PyTorch 2.1.0"
+  },
+  "scene_categories": {
+    "animation": {
+      "description": "Animated content, cartoons, computer graphics",
+      "characteristics": [
+        "bright colors",
+        "high saturation",
+        "smooth motion"
+      ],
+      "common_tags": [
+        "cartoon",
+        "animated",
+        "graphics",
+        "digital",
+        "bright",
+        "colorful"
+      ]
+    },
+    "outdoor": {
+      "description": "Outdoor scenes, nature, landscapes",
+      "characteristics": [
+        "natural lighting",
+        "green tones",
+        "sky visible"
+      ],
+      "common_tags": [
+        "nature",
+        "outside",
+        "landscape",
+        "environment",
+        "sky",
+        "outdoors"
+      ]
+    },
+    "indoor": {
+      "description": "Indoor scenes, rooms, buildings",
+      "characteristics": [
+        "artificial lighting",
+        "enclosed space",
+        "man-made objects"
+      ],
+      "common_tags": [
+        "inside",
+        "room",
+        "building",
+        "interior",
+        "walls",
+        "furniture"
+      ]
+    },
+    "action": {
+      "description": "Action scenes, movement, dynamic content",
+      "characteristics": [
+        "high motion",
+        "rapid changes",
+        "dynamic composition"
+      ],
+      "common_tags": [
+        "movement",
+        "dynamic",
+        "fast",
+        "exciting",
+        "motion",
+        "action"
+      ]
+    },
+    "dialogue": {
+      "description": "Dialogue scenes, conversations, people talking",
+      "characteristics": [
+        "stable composition",
+        "medium close-ups",
+        "facial focus"
+      ],
+      "common_tags": [
+        "talking",
+        "conversation",
+        "people",
+        "communication",
+        "speaking",
+        "dialogue"
+      ]
+    },
+    "transition": {
+      "description": "Transition scenes, cuts, fades between scenes",
+      "characteristics": [
+        "rapid changes",
+        "low confidence",
+        "mixed features"
+      ],
+      "common_tags": [
+        "change",
+        "shift",
+        "fade",
+        "cut",
+        "transition",
+        "uncertain"
+      ]
+    }
+  },
+  "tag_generation": {
+    "confidence_levels": {
+      "high": {
+        "threshold": 0.8,
+        "tags": [
+          "high_confidence",
+          "clear",
+          "well_defined"
+        ]
+      },
+      "medium": {
+        "threshold": 0.5,
+        "tags": [
+          "medium_confidence",
+          "reasonable"
+        ]
+      },
+      "low": {
+        "threshold": 0.0,
+        "tags": [
+          "low_confidence",
+          "uncertain",
+          "ambiguous"
+        ]
+      }
+    },
+    "color_analysis": {
+      "brightness": {
+        "high": {
+          "threshold": 180,
+          "tags": [
+            "bright",
+            "well_lit",
+            "luminous"
+          ]
+        },
+        "low": {
+          "threshold": 80,
+          "tags": [
+            "dark",
+            "low_light",
+            "dim"
+          ]
+        }
+      },
+      "saturation": {
+        "high": {
+          "threshold": 120,
+          "tags": [
+            "colorful",
+            "vibrant",
+            "saturated"
+          ]
+        },
+        "low": {
+          "threshold": 50,
+          "tags": [
+            "muted",
+            "desaturated",
+            "subtle"
+          ]
+        }
+      }
+    },
+    "max_tags_per_scene": 10
+  },
+  "preprocessing": {
+    "resize": [
+      128,
+      128
+    ],
+    "normalization": {
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    },
+    "augmentations": [
+      "RandomHorizontalFlip",
+      "ColorJitter"
+    ],
+    "color_space": "RGB"
+  },
+  "available_models": [
+    {
+      "name": "checkpoint_epoch_5.pth",
+      "size_mb": 19.49,
+      "type": "checkpoint"
+    },
+    {
+      "name": "best_scene_model.pth",
+      "size_mb": 6.5,
+      "type": "best"
+    },
+    {
+      "name": "final_scene_model.pth",
+      "size_mb": 6.5,
+      "type": "final"
+    },
+    {
+      "name": "checkpoint_epoch_1.pth",
+      "size_mb": 19.49,
+      "type": "checkpoint"
+    },
+    {
+      "name": "checkpoint_epoch_4.pth",
+      "size_mb": 19.49,
+      "type": "checkpoint"
+    },
+    {
+      "name": "checkpoint_epoch_3.pth",
+      "size_mb": 19.49,
+      "type": "checkpoint"
+    },
+    {
+      "name": "checkpoint_epoch_2.pth",
+      "size_mb": 19.49,
+      "type": "checkpoint"
+    }
+  ],
+  "performance": {
+    "expected_accuracy": "50-70% on diverse content",
+    "processing_speed": "10-30 fps on CPU",
+    "memory_usage": "50-100 MB",
+    "supported_formats": [
+      "mp4",
+      "avi",
+      "mov",
+      "mkv",
+      "webm"
+    ]
+  },
+  "usage": {
+    "recommended_input": "128x128 RGB images",
+    "output_format": {
+      "scene_detection": [
+        "scene_id",
+        "start_time",
+        "end_time",
+        "scene_class",
+        "confidence",
+        "tags"
+      ],
+      "clip_extraction": "MP4 clips for each scene",
+      "thumbnails": "JPG preview images"
+    },
+    "api_endpoints": [
+      "POST /api/upload - Upload video for processing",
+      "GET /api/status/<video_id> - Check processing status",
+      "GET /api/scenes/<video_id> - Get detected scenes",
+      "GET /api/search/<video_id> - Search scenes by tags"
+    ]
+  }
+}
